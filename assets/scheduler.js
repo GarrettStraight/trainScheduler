@@ -25,6 +25,7 @@ var destination = "";
 var newTrainTime = "";
 var arrival = "";
 var minutesAway = "";
+var frequency = "";
 
 
 
@@ -34,17 +35,17 @@ $("#submit").on("click", function(event) {
       name = $("#nameInput").val().trim();
       destination = $("#destinationInput").val().trim();
       newTrainTime = $("#startTimeInput").val().trim();
-      minutesAway = $("#frequencyInput").val().trim();
+      frequency = $("#frequencyInput").val().trim();
 
 
-      console.log(name)
-      console.log(destination)
+      
       // Code for handling the push
       database.ref().push({
         name: name,
         destination: destination,
         newTrainTime: newTrainTime,
-        minutesAway: minutesAway
+        minutesAway: minutesAway,
+        frequency: frequency
 
       });
 
@@ -52,7 +53,7 @@ $("#submit").on("click", function(event) {
 
 
 	 // Firebase watcher + initial loader HINT: .on("value")
-    database.ref().on("value", function(snapshot) {
+    database.ref().on("child_added", function(snapshot) {
       // storing the snapshot.val() in a variable for convenience
       var sv = snapshot.val();
       var p = snapshot.val().name;
@@ -64,15 +65,33 @@ $("#submit").on("click", function(event) {
       // Using the last user's key to access the last added user object
       var lastObj = sv[lastKey]
       // Console.loging the last user's data
-      console.log(p);
-      console.log(lastObj.destination);
-      console.log(lastObj.newTrainTime);
-      console.log(lastObj.minutesAway);
+      
+      
+      
+
+      
+      
+      var newName = $("<div class='col-lg-9'>" + sv.name +  "</div>");
+      var newDest = $("<div class='col-lg-9'>" + sv.destination + "</div>");
+      var newTime = $("<div class='col-lg-9'>" + sv.newTrainTime + "</div>");
+      var newMinutes = $("<div class='col-lg-9'>" + sv.minutesAway + "</div>");
+      var newFreq = $("<div class='col-lg-9'>" + sv.frequency + "</div>");
+
+
+
       // Change the HTML to reflect
-      $("#trainName").append(lastObj.name);
-      $("#trainDestination").append(lastObj.destination);
-      $("#trainFrequency").append(lastObj.newTrainTime);
-      $("#trainMinutesAway").append(lastObj.minutesAway);
+      $("#trainName").append(newName);
+      $("#trainDestination").append(newDest);
+      $("#trainFrequency").append(newFreq);
+      $("#trainMinutesAway").append(newMinutes);
+
+     var next = currentTime % sv.frequency;
+     console.log(next);
+     var nextTime = next;
+     console.log(moment(next + currentTime).format("hh:mm"));
+     
+     
+     
       // Handle the errors
     }, function(errorObject) {
       console.log("Errors handled: " + errorObject.code);
