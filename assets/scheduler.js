@@ -36,7 +36,7 @@ $("#submit").on("click", function(event) {
       destination = $("#destinationInput").val().trim();
       newTrainTime = $("#startTimeInput").val().trim();
       frequency = $("#frequencyInput").val().trim();
-
+      // frequency = moment(format("mm:ss"));
 
       
       // Code for handling the push
@@ -86,11 +86,20 @@ $("#submit").on("click", function(event) {
       $("#trainMinutesAway").append(newMinutes);
 
      var next = currentTime % sv.frequency;
-     console.log(next);
+     (moment(next).format("hh:mm"));
+     console.log(moment(next += currentTime).format("hh:mm"));
      var nextTime = next;
-     console.log(moment(next + currentTime).format("hh:mm"));
-     
-     
+     var q = (moment(next += currentTime).format("hh:mm"));
+     console.log(q);
+     var x = (moment(next + currentTime).format("hh:mm"));
+     	var y = (moment(next + x).format("hh:mm"));
+     	console.log(y);
+
+	var q =	moment(currentTime, "mm:ss").add(next, "minutes");
+	console.log(q);
+
+     // frequencyConverted = moment(frequency, "hh:mm");
+     // console.log(frequencyConverted);
      
       // Handle the errors
     }, function(errorObject) {
